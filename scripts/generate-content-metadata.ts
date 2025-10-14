@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-import { readdirSync, writeFileSync } from "fs";
+import { readdirSync, readFileSync, writeFileSync } from "fs";
 import { basename, extname } from "path";
 
 interface DocMetadata {
@@ -16,12 +16,14 @@ interface ExampleMetadata {
 }
 
 interface ContentMetadata {
+  version: string;
   docs: DocMetadata[];
   examples: ExampleMetadata[];
 }
 
 const DOCS_SOURCE = "node_modules/@falai/agent/docs";
 const EXAMPLES_SOURCE = "node_modules/@falai/agent/examples";
+const PACKAGE_JSON = "node_modules/@falai/agent/package.json";
 const OUTPUT_FILE = "src/content-metadata.json";
 
 function slugify(filename: string): string {
@@ -79,10 +81,22 @@ function generateExamplesMetadata(): ExampleMetadata[] {
     .sort((a, b) => a.title.localeCompare(b.title));
 }
 
+function getPackageVersion(): string {
+  try {
+    const packageJson = JSON.parse(readFileSync(PACKAGE_JSON, "utf-8"));
+    return packageJson.version || "unknown";
+  } catch (error) {
+    console.warn("⚠️  Could not read package version", error);
+    return "unknown";
+  }
+}
+
 function generateMetadata() {
   console.log("📝 Generating content metadata...");
 
+  const version = getPackageVersion();
   const metadata: ContentMetadata = {
+    version,
     docs: generateDocsMetadata(),
     examples: generateExamplesMetadata(),
   };
@@ -92,6 +106,7 @@ function generateMetadata() {
   console.log(
     `✅ Generated metadata for ${metadata.docs.length} docs and ${metadata.examples.length} examples`
   );
+  console.log(`📦 Package version: ${version}`);
   console.log(`📄 Written to ${OUTPUT_FILE}`);
 }
 

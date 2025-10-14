@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import contentMetadata from "../content-metadata.json";
 
 export function Header() {
   return (
@@ -6,7 +7,10 @@ export function Header() {
       <div className="header-content">
         <Link to="/" className="logo">
           <span className="logo-icon">🤖</span>
-          <span className="logo-text">@falai/agent</span>
+          <span className="logo-text">
+            @falai/agent
+            <span className="version-badge">v{contentMetadata.version}</span>
+          </span>
         </Link>
         <nav className="header-nav">
           <Link to="/#-quick-start">Quick Start</Link>
