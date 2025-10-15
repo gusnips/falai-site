@@ -160,6 +160,20 @@ code {
   border-color: var(--accent-primary);
 }
 
+.mobile-menu-button {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s;
+}
+
+.mobile-menu-button:hover {
+  color: var(--accent-primary);
+}
+
 /* Main Container */
 .main-container {
   display: flex;
@@ -661,8 +675,50 @@ code {
     font-size: 1.25rem;
   }
 
+  .mobile-menu-button {
+    display: block;
+  }
+
   .header-nav {
-    gap: 1rem;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .header-nav.mobile-open {
+    max-height: 400px;
+    opacity: 1;
+  }
+
+  .header-nav a {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .header-nav a:last-child {
+    border-bottom: none;
+  }
+
+  .header-nav a::after {
+    display: none;
+  }
+
+  .github-link {
+    border-radius: 0;
+    background-color: transparent;
+    border: none;
+    border-top: 1px solid var(--border-color);
   }
 
   .not-found-title {

@@ -18,9 +18,9 @@ export function HomePage() {
           <span className="tag">Production-Ready</span>
         </div>
         <div className="hero-actions">
-          <Link to="/#-quick-start" className="btn btn-primary">
+          <a href="#-quick-start" className="btn btn-primary">
             Quick Start
-          </Link>
+          </a>
           <Link to="/docs/getting-started" className="btn btn-secondary">
             Documentation
           </Link>

@@ -34,9 +34,19 @@ function slugify(filename: string): string {
 }
 
 function titleCase(str: string): string {
-  return str
-    .split(/[-_]/)
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  const words = str.split(/[-_]/);
+  return words
+    .map((word, index) => {
+      // Capitalize first word, keep rest lowercase unless it's an acronym
+      if (index === 0) {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      }
+      // Check if word is likely an acronym (all caps, 2-5 letters)
+      if (word.length <= 5 && word.toUpperCase() === word) {
+        return word.toUpperCase();
+      }
+      return word.toLowerCase();
+    })
     .join(" ");
 }
 
