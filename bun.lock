@@ -4,7 +4,7 @@
     "": {
       "name": "falai-site",
       "dependencies": {
-        "@falai/agent": "0.4",
+        "@falai/agent": "0.5",
         "react": "^19.1.1",
         "react-dom": "^19.1.1",
         "react-markdown": "^10.1.0",
@@ -146,7 +146,7 @@
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.4.0", "", { "dependencies": { "@eslint/core": "^0.16.0", "levn": "^0.4.1" } }, "sha512-sB5uyeq+dwCWyPi31B2gQlVlo+j5brPlWx4yZBrEaRo/nhdDE8Xke1gsGgtiBdaBTxuTkceLVuVt/pclrasb0A=="],
 
-    "@falai/agent": ["@falai/agent@0.4.0", "", { "dependencies": { "@anthropic-ai/sdk": "^0.65.0", "@google/genai": "^0.3.0", "openai": "^6.3.0" }, "peerDependencies": { "@opensearch-project/opensearch": "^2.0.0", "@prisma/client": "^6.0.0", "better-sqlite3": "^11.0.0 || ^12.0.0", "ioredis": "^5.7.0", "mongodb": "^6.0.0 || ^7.0.0", "mysql2": "^3.2.0", "pg": "^8.11.0", "redis": "^4.6.0 || ^5.0.0" }, "optionalPeers": ["@opensearch-project/opensearch", "@prisma/client", "better-sqlite3", "ioredis", "mongodb", "mysql2", "pg", "redis"] }, "sha512-0vLEGbnjMYvO99pWUiMbY5U6rJ+/KVMLmSN+J7P4eiL3e6VsOHbUQQSB+wjZ5q5RhDnrfE4ae2BK9jtkQ6n0PA=="],
+    "@falai/agent": ["@falai/agent@0.5.1", "", { "dependencies": { "@anthropic-ai/sdk": "^0.65.0", "@google/genai": "^0.3.0", "openai": "^6.3.0" }, "peerDependencies": { "@opensearch-project/opensearch": "^2.0.0", "@prisma/client": "^6.0.0", "better-sqlite3": "^11.0.0 || ^12.0.0", "ioredis": "^5.7.0", "mongodb": "^6.0.0 || ^7.0.0", "mysql2": "^3.2.0", "pg": "^8.11.0", "redis": "^4.6.0 || ^5.0.0" }, "optionalPeers": ["@opensearch-project/opensearch", "@prisma/client", "better-sqlite3", "ioredis", "mongodb", "mysql2", "pg", "redis"] }, "sha512-OwINVJqJxhgLpIp6TgPY2lfRS5uDRohApcsYw8Cd9N7H0OhumXr88Bo12gcLoR8IbRMmrXWv6xHkCTYV5dEhvw=="],
 
     "@google/genai": ["@google/genai@0.3.1", "", { "dependencies": { "google-auth-library": "^9.14.2", "ws": "^8.18.0" } }, "sha512-jf1RSDjRqBOjm6zYqx90jQVgCumR7qT/4vqz5dVzb6WalnTqYX6LYONGVqzucQXtB3GFSZcUsqNv5o7SSdcbkQ=="],
 
