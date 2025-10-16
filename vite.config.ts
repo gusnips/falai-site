@@ -6,7 +6,19 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 export default defineConfig({
   server: {
     open: true,
-    port: 9999,
+    port: 5173,
+    watch: {
+      usePolling: true,
+      interval: 1000,
+    },
+    hmr: {
+      overlay: true,
+    },
+  },
+  preview: {
+    host: "0.0.0.0",
+    port: 5173,
+    allowedHosts: ["falai.dev"],
   },
   plugins: [
     react(),
