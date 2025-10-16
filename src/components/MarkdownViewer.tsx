@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -9,6 +10,49 @@ import "highlight.js/styles/github-dark.css";
 interface MarkdownViewerProps {
   path: string;
 }
+
+const customComponents = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  a: ({ href, children, ...props }: any) => {
+    if (!href) {
+      return <a {...props}>{children}</a>;
+    }
+
+    if (href.startsWith("http")) {
+      return (
+        <a href={href} {...props} target="_blank" rel="noopener noreferrer">
+          {children}
+        </a>
+      );
+    }
+
+    const slugify = (str: string) => str.toLowerCase().replace(/[_]/g, "-");
+
+    if (href.endsWith(".md")) {
+      const slug = slugify(href.replace(/\.md$/, ""));
+      return (
+        <Link to={`/docs/${slug}`} {...props}>
+          {children}
+        </Link>
+      );
+    }
+
+    if (href.endsWith(".ts") || href.endsWith(".prisma")) {
+      const slug = slugify(href.replace(/\.(ts|prisma)$/, ""));
+      return (
+        <Link to={`/examples/${slug}`} {...props}>
+          {children}
+        </Link>
+      );
+    }
+
+    return (
+      <a href={href} {...props}>
+        {children}
+      </a>
+    );
+  },
+};
 
 export function MarkdownViewer({ path }: MarkdownViewerProps) {
   const [content, setContent] = useState<string>("");
@@ -59,6 +103,7 @@ export function MarkdownViewer({ path }: MarkdownViewerProps) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw, rehypeGithubSlug, rehypeHighlight]}
+        components={customComponents}
       >
         {content}
       </ReactMarkdown>
