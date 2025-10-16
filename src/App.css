@@ -124,7 +124,7 @@ code {
   text-decoration: none;
   color: var(--text-primary);
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1rem;
   transition: color 0.2s;
 }
 
@@ -293,7 +293,10 @@ code {
   overflow-x: hidden;
 }
 
-/* Home Page - commented out animation for custom hero animations */
+/* Home Page */
+.home-page {
+  animation: fadeIn 0.6s ease-in-out;
+}
 
 .hero {
   text-align: center;
@@ -308,7 +311,7 @@ code {
   border: 1px solid var(--border-color);
 }
 
-.hero h1 {
+/* .hero h1 {
   font-size: 3.5rem;
   font-weight: 800;
   margin-bottom: 1rem;
@@ -321,7 +324,7 @@ code {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
+} */
 
 .hero-icon {
   font-size: 4rem;
@@ -767,8 +770,6 @@ code {
     font-size: 5rem;
   }
 }
-
-/* Animated Gradient */
 .gradient-animated {
   background: linear-gradient(
     45deg,
@@ -778,14 +779,9 @@ code {
   );
   background-size: 300% 300%;
   animation: gradient-shift 5s ease-in-out infinite;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: white;
+  border: none;
   transition: all 0.3s ease;
-}
-
-.gradient-animated:hover {
-  animation-duration: 2s;
 }
 
 @keyframes gradient-shift {
@@ -799,10 +795,31 @@ code {
     background-position: 0% 50%;
   }
 }
+/* Texto com gradiente animado */
+.gradient-text-animated {
+  background: linear-gradient(
+    45deg,
+    var(--accent-primary),
+    var(--accent-secondary),
+    #CA4672
+  );
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 5s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
 
-.hero-container[style*="position: absolute"] {
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 10;
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

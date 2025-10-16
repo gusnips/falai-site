@@ -17,11 +17,13 @@ export function Header() {
     <header className="header">
       <div className="header-content">
         <Link to="/" className="logo">
-          <span className="logo-icon">🤖</span>
-          <span className="logo-text">
-            @falai/agent
+        {/* <div className="hero-content h-[80vh]">
+            <img src="/logo-36.png" alt="Falai Agent" className="" />
+          </div> */}
+          <span className="font-sm font-comfortaa-bold gradient-text-animated">@falai/agent</span>
+          
             <span className="version-badge">v{contentMetadata.version}</span>
-          </span>
+      
         </Link>
 
         <button

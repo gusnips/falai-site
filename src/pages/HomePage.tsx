@@ -6,45 +6,40 @@ import 'animate.css';
 export function HomePage() {
   const [heroAnimation, setHeroAnimation] = useState('');
   const [containerAnimation, setContainerAnimation] = useState('');
-  const [containerPosition, setContainerPosition] = useState('absolute');
-  const [visibility, setVisibility] = useState('hidden');
+  // MUDANÇA AQUI: Renomeei para ser mais claro
+  const [position, setPosition] = useState<'absolute' | 'relative'>('absolute');
+  const [visibility, setVisibility] = useState<'hidden' | 'visible'>('hidden');
 
-  useEffect(() => {
-    // Após 2s, inicia a animação zoomInUp no hero
-    const timer1 = setTimeout(() => {
-      setHeroAnimation('animate__zoomInUp');
-    }, 2000);
+  // useEffect(() => {
+  //   const timer2 = setTimeout(() => {
+  //     setContainerAnimation('animate__lightSpeedInRight');
+  //     setVisibility('visible'); // Agora isso vai funcionar!
 
-    // Aguarda o fim da primeira animação e inicia a segunda
-    const timer2 = setTimeout(() => {
-      
-      setContainerAnimation('animate__lightSpeedInRight');
-      setVisibility('visible');
-      const heroContainer = document.getElementById('hero-container');
-      heroContainer?.classList.remove('hero-container');
 
-      // Após iniciar a segunda animação, muda para position relative
-      setTimeout(() => {
-        setContainerPosition('relative');
-      }, 100); // Pequeno delay para garantir que a animação começou
-    }, 3000); // 2s inicial + ~2s da animação zoomInUp
+  //     // Após iniciar a segunda animação, muda para position relative
+  //     setTimeout(() => {
+  //       setPosition('relative'); // Agora isso vai funcionar!
+  //     }, 100); 
+  //   }, 3000); 
 
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
-  }, []);
+  //   return () => {
+  //     clearTimeout(timer2);
+  //   };
+  // }, []);
 
   return (
     <div className="home-page">
-      <div className={`min-h-screen hero animate__animated animate__zoomInUp`}>
-        <div id="hero=container"
-          className={`hero-container animate__animated ${containerAnimation}`}
+      {/* MUDANÇA AQUI: Adicionei a variável de animação do estado */}
+      <div 
+      className={`min-h-screen hero`}>
+        <div 
+          id="hero-container"
+          className={`hero-container animate__animated animate__lightSpeedInRight `}
         >
           <div className="hero-content h-[80vh]">
             <img src="/logo-120.png" alt="Falai Agent" className="" />
           </div>
-          <h1 className="text-4xl font-bold text-center font-comfortaa-bold gradient-animated">@falai/agent</h1>
+          <h1 className="text-4xl font-bold text-center font-comfortaa-bold gradient-text-animated">@falai/agent</h1>
           <p className="hero-subtitle">
             Build intelligent, conversational AI agents with TypeScript
           </p>
@@ -62,7 +57,6 @@ export function HomePage() {
             </Link>
           </div>
         </div>
-
       </div>
       <div className="readme-content">
         <MarkdownViewer path="/content/README.md" />
