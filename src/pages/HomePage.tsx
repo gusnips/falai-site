@@ -5,10 +5,9 @@ export function HomePage() {
   return (
     <div className="home-page">
       <div className="hero">
-        <h1>
-          <span className="hero-icon">🤖</span>
-          @falai/agent
-        </h1>
+        <div className="hero-content">
+          <img src="/logo.png" alt="Falai Agent" className="w-full" />
+        </div>
         <p className="hero-subtitle">
           Build intelligent, conversational AI agents with TypeScript
         </p>
