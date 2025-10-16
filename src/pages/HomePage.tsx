@@ -6,7 +6,7 @@ export function HomePage() {
     <div className="home-page">
       <div className="hero">
         <div className="hero-content">
-          <img src="/logo.png" alt="Falai Agent" className="w-full" />
+          <img src="/logo.png" alt="Falai Agent" className="w-10 h-auto" />
         </div>
         <p className="hero-subtitle">
           Build intelligent, conversational AI agents with TypeScript
