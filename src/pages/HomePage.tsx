@@ -18,12 +18,12 @@ export function HomePage() {
             @falai/agent
           </h1>
           <p className="hero-subtitle">
-            Build intelligent, conversational AI agents with TypeScript
+            Type-Safe AI Conversational Agents That Actually Work in Production
           </p>
           <div className="hero-tags">
-            <span className="tag">Standalone</span>
-            <span className="tag">Strongly-Typed</span>
-            <span className="tag">Production-Ready</span>
+            <span className="tag">Schema-driven data extraction</span>
+            <span className="tag">Predictable conversations</span>
+            <span className="tag">Enterprise-ready</span>
           </div>
           <div className="hero-actions">
             <a href="#-quick-start" className="btn gradient-animated">
