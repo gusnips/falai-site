@@ -3,11 +3,18 @@ import { CodeViewer } from "../components/CodeViewer";
 import contentMetadata from "../content-metadata.json";
 
 export function ExamplePage() {
-  const { slug } = useParams<{ slug: string }>();
+  const { categorySlug, itemSlug } = useParams<{ categorySlug?: string; itemSlug?: string }>();
 
-  const example = contentMetadata.examples.find((e) => e.slug === slug);
+  // If no category/item specified, redirect to examples overview
+  if (!categorySlug || !itemSlug) {
+    return <Navigate to="/examples" replace />;
+  }
 
-  if (!example) {
+  // Find the category and example
+  const category = contentMetadata.examples.find((c) => c.slug === categorySlug);
+  const example = category?.items.find((e) => e.slug === itemSlug);
+
+  if (!example || !('language' in example)) {
     return <Navigate to="/" replace />;
   }
 

@@ -3,9 +3,16 @@ import { MarkdownViewer } from "../components/MarkdownViewer";
 import contentMetadata from "../content-metadata.json";
 
 export function DocPage() {
-  const { slug } = useParams<{ slug: string }>();
+  const { categorySlug, itemSlug } = useParams<{ categorySlug?: string; itemSlug?: string }>();
 
-  const doc = contentMetadata.docs.find((d) => d.slug === slug);
+  // If no category/item specified, redirect to docs overview
+  if (!categorySlug || !itemSlug) {
+    return <Navigate to="/docs" replace />;
+  }
+
+  // Find the category and doc
+  const category = contentMetadata.docs.find((c) => c.slug === categorySlug);
+  const doc = category?.items.find((d) => d.slug === itemSlug);
 
   if (!doc) {
     return <Navigate to="/" replace />;

@@ -3,6 +3,8 @@ import { Layout } from "./components/Layout";
 import { HomePage } from "./pages/HomePage";
 import { DocPage } from "./pages/DocPage";
 import { ExamplePage } from "./pages/ExamplePage";
+import { DocsOverviewPage } from "./pages/DocsOverviewPage";
+import { ExamplesOverviewPage } from "./pages/ExamplesOverviewPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import "./App.css";
 
@@ -12,8 +14,10 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/docs/:slug" element={<DocPage />} />
-          <Route path="/examples/:slug" element={<ExamplePage />} />
+          <Route path="/docs" element={<DocsOverviewPage />} />
+          <Route path="/docs/:categorySlug/:itemSlug" element={<DocPage />} />
+          <Route path="/examples" element={<ExamplesOverviewPage />} />
+          <Route path="/examples/:categorySlug/:itemSlug" element={<ExamplePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

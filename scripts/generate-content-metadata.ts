@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
-import { readdirSync, readFileSync, writeFileSync } from "fs";
-import { basename, extname } from "path";
+import { readdirSync, readFileSync, writeFileSync, statSync } from "fs";
+import { basename, extname, join } from "path";
 
 interface DocMetadata {
   slug: string;
@@ -15,10 +15,16 @@ interface ExampleMetadata {
   language: string;
 }
 
+interface CategoryMetadata {
+  slug: string;
+  title: string;
+  items: DocMetadata[] | ExampleMetadata[];
+}
+
 interface ContentMetadata {
   version: string;
-  docs: DocMetadata[];
-  examples: ExampleMetadata[];
+  docs: CategoryMetadata[];
+  examples: CategoryMetadata[];
 }
 
 const DOCS_SOURCE = "node_modules/@falai/agent/docs";
@@ -50,10 +56,59 @@ function titleCase(str: string): string {
     .join(" ");
 }
 
-function generateDocsMetadata(): DocMetadata[] {
-  const files = readdirSync(DOCS_SOURCE);
-  return files
-    .filter((file) => file.endsWith(".md"))
+function scanDirectoryRecursive(dirPath: string, basePath: string): (DocMetadata | ExampleMetadata)[] {
+  const items: (DocMetadata | ExampleMetadata)[] = [];
+  const entries = readdirSync(dirPath);
+
+  for (const entry of entries) {
+    const fullPath = join(dirPath, entry);
+    const stat = statSync(fullPath);
+
+    if (stat.isFile() && (entry.endsWith(".md") || entry.endsWith(".ts") || entry.endsWith(".prisma"))) {
+      const slug = slugify(entry);
+      const title = titleCase(basename(entry, extname(entry)));
+      const relativePath = `${basePath}/${entry}`;
+      
+      if (entry.endsWith(".md")) {
+        items.push({
+          slug,
+          title,
+          path: relativePath,
+        } as DocMetadata);
+      } else {
+        const language = entry.endsWith(".prisma") ? "prisma" : "typescript";
+        items.push({
+          slug,
+          title,
+          path: relativePath,
+          language,
+        } as ExampleMetadata);
+      }
+    } else if (stat.isDirectory()) {
+      // Recursively scan subdirectories
+      const subItems = scanDirectoryRecursive(fullPath, `${basePath}/${entry}`);
+      items.push(...subItems);
+    }
+  }
+
+  return items.sort((a, b) => {
+    // Sort with README first, then alphabetically
+    if (a.slug === "readme") return -1;
+    if (b.slug === "readme") return 1;
+    return a.title.localeCompare(b.title);
+  });
+}
+
+function generateDocsMetadata(): CategoryMetadata[] {
+  const categories: CategoryMetadata[] = [];
+  const entries = readdirSync(DOCS_SOURCE);
+
+  // Handle root level files first
+  const rootFiles = entries
+    .filter((entry) => {
+      const fullPath = join(DOCS_SOURCE, entry);
+      return statSync(fullPath).isFile() && entry.endsWith(".md");
+    })
     .map((file) => {
       const slug = slugify(file);
       const title = titleCase(basename(file, ".md"));
@@ -64,19 +119,51 @@ function generateDocsMetadata(): DocMetadata[] {
       };
     })
     .sort((a, b) => {
-      // Sort with README first, then GETTING_STARTED, then alphabetically
       if (a.slug === "readme") return -1;
       if (b.slug === "readme") return 1;
-      if (a.slug === "getting-started") return -1;
-      if (b.slug === "getting-started") return 1;
       return a.title.localeCompare(b.title);
     });
+
+  if (rootFiles.length > 0) {
+    categories.push({
+      slug: "overview",
+      title: "Overview",
+      items: rootFiles,
+    });
+  }
+
+  // Handle directories
+  const directories = entries.filter((entry) => {
+    const fullPath = join(DOCS_SOURCE, entry);
+    return statSync(fullPath).isDirectory();
+  });
+
+  for (const dir of directories) {
+    const dirPath = join(DOCS_SOURCE, dir);
+    const items = scanDirectoryRecursive(dirPath, `/content/docs/${dir}`);
+    
+    if (items.length > 0) {
+      categories.push({
+        slug: slugify(dir),
+        title: titleCase(dir),
+        items: items as DocMetadata[],
+      });
+    }
+  }
+
+  return categories;
 }
 
-function generateExamplesMetadata(): ExampleMetadata[] {
-  const files = readdirSync(EXAMPLES_SOURCE);
-  return files
-    .filter((file) => file.endsWith(".ts") || file.endsWith(".prisma"))
+function generateExamplesMetadata(): CategoryMetadata[] {
+  const categories: CategoryMetadata[] = [];
+  const entries = readdirSync(EXAMPLES_SOURCE);
+
+  // Handle root level files first
+  const rootFiles = entries
+    .filter((entry) => {
+      const fullPath = join(EXAMPLES_SOURCE, entry);
+      return statSync(fullPath).isFile() && (entry.endsWith(".ts") || entry.endsWith(".prisma"));
+    })
     .map((file) => {
       const slug = slugify(file);
       const title = titleCase(basename(file, extname(file)));
@@ -89,6 +176,35 @@ function generateExamplesMetadata(): ExampleMetadata[] {
       };
     })
     .sort((a, b) => a.title.localeCompare(b.title));
+
+  if (rootFiles.length > 0) {
+    categories.push({
+      slug: "general",
+      title: "General",
+      items: rootFiles,
+    });
+  }
+
+  // Handle directories
+  const directories = entries.filter((entry) => {
+    const fullPath = join(EXAMPLES_SOURCE, entry);
+    return statSync(fullPath).isDirectory();
+  });
+
+  for (const dir of directories) {
+    const dirPath = join(EXAMPLES_SOURCE, dir);
+    const items = scanDirectoryRecursive(dirPath, `/content/examples/${dir}`);
+    
+    if (items.length > 0) {
+      categories.push({
+        slug: slugify(dir),
+        title: titleCase(dir),
+        items: items as ExampleMetadata[],
+      });
+    }
+  }
+
+  return categories;
 }
 
 function getPackageVersion(): string {
@@ -113,8 +229,11 @@ function generateMetadata() {
 
   writeFileSync(OUTPUT_FILE, JSON.stringify(metadata, null, 2));
 
+  const totalDocs = metadata.docs.reduce((sum, category) => sum + category.items.length, 0);
+  const totalExamples = metadata.examples.reduce((sum, category) => sum + category.items.length, 0);
+  
   console.log(
-    `✅ Generated metadata for ${metadata.docs.length} docs and ${metadata.examples.length} examples`
+    `✅ Generated metadata for ${totalDocs} docs in ${metadata.docs.length} categories and ${totalExamples} examples in ${metadata.examples.length} categories`
   );
   console.log(`📦 Package version: ${version}`);
   console.log(`📄 Written to ${OUTPUT_FILE}`);

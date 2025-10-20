@@ -60,10 +60,10 @@ export function Header() {
           <a href="/#-quick-start" onClick={closeMobileMenu}>
             Quick Start
           </a>
-          <Link to="/docs/docs" onClick={closeMobileMenu}>
+          <Link to="/docs" onClick={closeMobileMenu}>
             Docs
           </Link>
-          <Link to="/docs/examples" onClick={closeMobileMenu}>
+          <Link to="/examples" onClick={closeMobileMenu}>
             Examples
           </Link>
           <a
