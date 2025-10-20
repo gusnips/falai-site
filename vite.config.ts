@@ -25,11 +25,11 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: "node_modules/@falai/agent/docs/*",
+          src: "node_modules/@falai/agent/docs/**/*",
           dest: "content/docs",
         },
         {
-          src: "node_modules/@falai/agent/examples/*",
+          src: "node_modules/@falai/agent/examples/**/*",
           dest: "content/examples",
         },
         {
